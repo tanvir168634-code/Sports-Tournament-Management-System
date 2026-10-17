@@ -1,0 +1,642 @@
+SPORTS TOURNAMENT MANAGEMENT SYSTEM
+BASIC AND ADVANCED PL/SQL QUERIES
+Source: ADMS_MidTermProject_Group4.pdf
+
+============================================================
+BASIC PL/SQL
+============================================================
+
+VARIABLE
+Question 1:
+Write a PL/SQL code that shows the FC Barcelona's captain name.
+
+DECLARE
+    name team.teamcaptain%TYPE;
+BEGIN
+    SELECT teamcaptain INTO name
+    FROM team
+    WHERE teamname = 'FC Barcelona';
+
+    DBMS_OUTPUT.PUT_LINE('Captain Name: ' || name);
+END;
+/
+
+OPERATORS
+Question 3:
+Show duration of the tournament named UEFA Champions League by using PL/SQL.
+
+DECLARE
+    s_date tournament.startdate%TYPE;
+    end_date tournament.enddate%TYPE;
+    duration NUMBER;
+BEGIN
+    SELECT startdate, enddate INTO s_date, end_date
+    FROM tournament
+    WHERE tournamentname = 'UEFA Champions League';
+
+    duration := end_date - s_date;
+
+    DBMS_OUTPUT.PUT_LINE('Duration: ' || duration || ' Days');
+END;
+/
+
+Question 4:
+Create a PL/SQL code that displays the user ID whose mobile number is like '%19%0'.
+
+DECLARE
+    id NUMBER;
+BEGIN
+    SELECT userid INTO id
+    FROM userphone
+    WHERE mobileno LIKE '%19%0';
+
+    DBMS_OUTPUT.PUT_LINE('USER Id: ' || id);
+END;
+/
+
+Question 5:
+Write a PL/SQL code that displays the name and coach of the team with ID 301.
+
+DECLARE
+    v_team_name team.teamname%TYPE;
+    v_coach team.teamcoach%TYPE;
+BEGIN
+    SELECT teamname, teamcoach INTO v_team_name, v_coach
+    FROM team
+    WHERE teamid = 301;
+
+    DBMS_OUTPUT.PUT_LINE('Team Name: ' || v_team_name || ' | Coach: ' || v_coach);
+END;
+/
+
+Question 6:
+Write a PL/SQL code to display the user name and password for user ID 101.
+
+DECLARE
+    v_username users.username%TYPE;
+    v_pass users.password%TYPE;
+BEGIN
+    SELECT username, password INTO v_username, v_pass
+    FROM users
+    WHERE userid = 101;
+
+    DBMS_OUTPUT.PUT_LINE('User Name: ' || v_username || ' | Password: ' || v_pass);
+END;
+/
+
+Question 7:
+Write a PL/SQL code to check whether the match status for match ID 501 is 'Completed' or 'Scheduled' using IF-THEN-ELSE.
+
+DECLARE
+    v_status match.m_status%TYPE;
+BEGIN
+    SELECT m_status INTO v_status
+    FROM match
+    WHERE matchid = 501;
+
+    IF v_status = 'Completed' THEN
+        DBMS_OUTPUT.PUT_LINE('Match 501 is already completed.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Match 501 is scheduled or pending.');
+    END IF;
+END;
+/
+
+Question 8:
+Write a PL/SQL code to fetch the player name and position info for player ID 401.
+
+DECLARE
+    v_pname player.playername%TYPE;
+    v_info player.info%TYPE;
+BEGIN
+    SELECT playername, info INTO v_pname, v_info
+    FROM player
+    WHERE playerid = 401;
+
+    DBMS_OUTPUT.PUT_LINE('Player: ' || v_pname || ' | Role/Info: ' || v_info);
+END;
+/
+
+Question 9:
+Write a PL/SQL code to calculate total home team score and away team score sum for result ID 601.
+
+DECLARE
+    v_home VARCHAR2(20);
+    v_away VARCHAR2(20);
+BEGIN
+    SELECT hometeamscore, awayteamscore INTO v_home, v_away
+    FROM result
+    WHERE resultid = 601;
+
+    DBMS_OUTPUT.PUT_LINE('Home Score: ' || v_home || ' | Away Score: ' || v_away);
+END;
+/
+
+Question 10:
+Write a PL/SQL code to find the start date and end date of the tournament named 'La Liga Cup'.
+
+DECLARE
+    v_start tournament.startdate%TYPE;
+    v_end tournament.enddate%TYPE;
+BEGIN
+    SELECT startdate, enddate INTO v_start, v_end
+    FROM tournament
+    WHERE tournamentname = 'La Liga Cup';
+
+    DBMS_OUTPUT.PUT_LINE('Start Date: ' || v_start || ' | End Date: ' || v_end);
+END;
+/
+
+Question 11:
+Write a PL/SQL code to count total matches scheduled in Camp Nou venue.
+
+DECLARE
+    v_total NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_total
+    FROM match
+    WHERE venue = 'Camp Nou';
+
+    DBMS_OUTPUT.PUT_LINE('Total Matches at Camp Nou: ' || v_total);
+END;
+/
+
+Question 12:
+Write a PL/SQL code to check if a user with user ID 105 has 'Viewer' role using IF condition.
+
+DECLARE
+    v_roleid users.roleid%TYPE;
+BEGIN
+    SELECT roleid INTO v_roleid
+    FROM users
+    WHERE userid = 105;
+
+    IF v_roleid = 5 THEN
+        DBMS_OUTPUT.PUT_LINE('User 105 is a Viewer.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('User 105 has another role.');
+    END IF;
+END;
+/
+
+Question 13:
+Write a PL/SQL code to display player name and team ID for player ID 403.
+
+DECLARE
+    v_pname player.playername%TYPE;
+    v_tid player.teamid%TYPE;
+BEGIN
+    SELECT playername, teamid INTO v_pname, v_tid
+    FROM player
+    WHERE playerid = 403;
+
+    DBMS_OUTPUT.PUT_LINE('Player Name: ' || v_pname || ' | Belongs to Team ID: ' || v_tid);
+END;
+/
+
+Question 14:
+Write a PL/SQL code using CASE statement to describe the match status for match ID 504.
+
+DECLARE
+    v_status match.m_status%TYPE;
+    v_msg VARCHAR2(100);
+BEGIN
+    SELECT m_status INTO v_status
+    FROM match
+    WHERE matchid = 504;
+
+    CASE v_status
+        WHEN 'Completed' THEN v_msg := 'Match has been finished.';
+        WHEN 'Scheduled' THEN v_msg := 'Match is upcoming.';
+        ELSE v_msg := 'Status unknown.';
+    END CASE;
+
+    DBMS_OUTPUT.PUT_LINE('Match Status Note: ' || v_msg);
+END;
+/
+
+Question 15:
+Write a PL/SQL code to fetch mobile number for user ID 103.
+
+DECLARE
+    v_mobile userphone.mobileno%TYPE;
+BEGIN
+    SELECT mobileno INTO v_mobile
+    FROM userphone
+    WHERE userid = 103 AND ROWNUM = 1;
+
+    DBMS_OUTPUT.PUT_LINE('Mobile Number for User 103: ' || v_mobile);
+END;
+/
+
+Question 16:
+Write a PL/SQL code to calculate total number of teams registered in the system.
+
+DECLARE
+    v_team_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_team_count
+    FROM team;
+
+    DBMS_OUTPUT.PUT_LINE('Total Registered Teams: ' || v_team_count);
+END;
+/
+
+============================================================
+ADVANCED PL/SQL
+============================================================
+
+STORED FUNCTIONS
+
+Question 1:
+Write a PL/SQL Stored Function to return the total number of players registered in a specific team.
+
+CREATE OR REPLACE FUNCTION get_total_players(p_team_id NUMBER)
+RETURN NUMBER IS
+    v_total NUMBER := 0;
+BEGIN
+    SELECT COUNT(*) INTO v_total
+    FROM player
+    WHERE teamId = p_team_id;
+
+    RETURN v_total;
+END;
+/
+
+DECLARE
+    c NUMBER(2);
+BEGIN
+    c := get_total_players(301);
+    DBMS_OUTPUT.PUT_LINE('Total no. of Players: ' || c);
+END;
+/
+
+Question 2:
+Write a PL/SQL Stored Function to calculate the total duration (in days) of a specific tournament.
+
+CREATE OR REPLACE FUNCTION get_tournament_duration(p_tourn_id NUMBER)
+RETURN NUMBER IS
+    v_days NUMBER := 0;
+BEGIN
+    SELECT (endDate - startDate) INTO v_days
+    FROM tournament
+    WHERE tournamentId = p_tourn_id;
+
+    RETURN v_days;
+END;
+/
+
+DECLARE
+    c NUMBER(3);
+BEGIN
+    c := get_tournament_duration(201);
+    DBMS_OUTPUT.PUT_LINE('Tournament Duration in Days: ' || c);
+END;
+/
+
+STORED PROCEDURES
+
+Question 3:
+Write a PL/SQL Stored Procedure to update the status of a match based on the provided match.
+
+CREATE OR REPLACE PROCEDURE update_match_status(
+    p_match_id IN NUMBER,
+    p_status IN VARCHAR2
+) IS
+BEGIN
+    UPDATE match
+    SET m_status = p_status
+    WHERE matchId = p_match_id;
+
+    DBMS_OUTPUT.PUT_LINE('Match ID ' || p_match_id || ' status updated to ' || p_status);
+END;
+/
+
+BEGIN
+    update_match_status(504, 'Completed');
+END;
+/
+
+Question 4:
+Write a PL/SQL Stored Procedure to register a team for a tournament by inserting a record into the Register table.
+
+CREATE OR REPLACE PROCEDURE register_team_tournament(
+    p_team_id IN NUMBER,
+    p_tourn_id IN NUMBER
+) IS
+BEGIN
+    INSERT INTO register (teamId, tournamentId)
+    VALUES (p_team_id, p_tourn_id);
+
+    DBMS_OUTPUT.PUT_LINE(
+        'Team ' || p_team_id || ' registered successfully for Tournament ' || p_tourn_id
+    );
+END;
+/
+
+BEGIN
+    register_team_tournament(305, 202);
+END;
+/
+
+RECORDS
+
+Question 5:
+Write a PL/SQL program using a table-based record (%ROWTYPE) to retrieve and display full details of a specific user.
+
+DECLARE
+    v_user users%ROWTYPE;
+BEGIN
+    SELECT * INTO v_user
+    FROM users
+    WHERE userId = 103;
+
+    DBMS_OUTPUT.PUT_LINE('User ID: ' || v_user.userId);
+    DBMS_OUTPUT.PUT_LINE('User Name: ' || v_user.userName);
+    DBMS_OUTPUT.PUT_LINE('Role ID: ' || v_user.roleId);
+END;
+/
+
+Question 6:
+Write a PL/SQL program using a table-based record (%ROWTYPE) to fetch and display information for a tournament.
+
+DECLARE
+    v_tourn tournament%ROWTYPE;
+BEGIN
+    SELECT * INTO v_tourn
+    FROM tournament
+    WHERE tournamentId = 201;
+
+    DBMS_OUTPUT.PUT_LINE('Tournament Name: ' || v_tourn.tournamentName);
+    DBMS_OUTPUT.PUT_LINE('Start Date: ' || v_tourn.startDate);
+    DBMS_OUTPUT.PUT_LINE('End Date: ' || v_tourn.endDate);
+END;
+/
+
+EXPLICIT CURSORS
+
+Question 7:
+Write a PL/SQL block using an Explicit Cursor to iterate through all matches and print their ID, venue, and status.
+
+DECLARE
+    CURSOR c_matches IS
+        SELECT matchId, venue, m_status FROM match;
+
+    v_id match.matchId%TYPE;
+    v_venue match.venue%TYPE;
+    v_status match.m_status%TYPE;
+BEGIN
+    OPEN c_matches;
+
+    LOOP
+        FETCH c_matches INTO v_id, v_venue, v_status;
+        EXIT WHEN c_matches%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Match ID: ' || v_id || ' | Venue: ' || v_venue || ' | Status: ' || v_status
+        );
+    END LOOP;
+
+    CLOSE c_matches;
+END;
+/
+
+Question 8:
+Write a PL/SQL block using an Explicit Cursor to display the list of all teams along with their respective captain names.
+
+DECLARE
+    CURSOR c_teams IS
+        SELECT teamName, teamCaptain FROM team;
+
+    v_tname team.teamName%TYPE;
+    v_cap team.teamCaptain%TYPE;
+BEGIN
+    OPEN c_teams;
+
+    LOOP
+        FETCH c_teams INTO v_tname, v_cap;
+        EXIT WHEN c_teams%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE('Team: ' || v_tname || ' | Captain: ' || v_cap);
+    END LOOP;
+
+    CLOSE c_teams;
+END;
+/
+
+Question 9:
+Write a PL/SQL program combining an Explicit Cursor with a cursor-based record (c_players%ROWTYPE) to display player details.
+
+DECLARE
+    CURSOR c_players IS
+        SELECT * FROM player;
+
+    v_player_rec c_players%ROWTYPE;
+BEGIN
+    OPEN c_players;
+
+    LOOP
+        FETCH c_players INTO v_player_rec;
+        EXIT WHEN c_players%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Player ID: ' || v_player_rec.playerId ||
+            ' | Name: ' || v_player_rec.playerName
+        );
+    END LOOP;
+
+    CLOSE c_players;
+END;
+/
+
+Question 10:
+Write a PL/SQL program using a cursor-based record (c_results%ROWTYPE) to display all match results and scores.
+
+DECLARE
+    CURSOR c_results IS
+        SELECT * FROM result;
+
+    v_res_rec c_results%ROWTYPE;
+BEGIN
+    OPEN c_results;
+
+    LOOP
+        FETCH c_results INTO v_res_rec;
+        EXIT WHEN c_results%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Result ID: ' || v_res_rec.resultId ||
+            ' | Home Score: ' || v_res_rec.homeTeamScore ||
+            ' | Away Score: ' || v_res_rec.awayTeamScore
+        );
+    END LOOP;
+
+    CLOSE c_results;
+END;
+/
+
+ROW-LEVEL TRIGGERS
+
+Question 11:
+Create a Row-Level Trigger that automatically converts the playerName to UPPERCASE before inserting or updating records in the Player table.
+
+CREATE OR REPLACE TRIGGER trg_upper_player_name
+BEFORE INSERT OR UPDATE ON player
+FOR EACH ROW
+BEGIN
+    :new.playerName := UPPER(:new.playerName);
+END;
+/
+
+INSERT INTO player VALUES (406, 'jude bellingham', 'Central Midfielder', 302);
+SELECT * FROM player WHERE playerId = 406;
+
+Question 12:
+Create a Row-Level Trigger to prevent deletion of any match whose status is marked as 'Completed'.
+
+CREATE OR REPLACE TRIGGER trg_prevent_match_del
+BEFORE DELETE ON match
+FOR EACH ROW
+BEGIN
+    IF :old.m_status = 'Completed' THEN
+        RAISE_APPLICATION_ERROR(
+            -20001,
+            'Cannot delete a match that is already completed!'
+        );
+    END IF;
+END;
+/
+
+DELETE FROM match WHERE matchId = 501;
+
+STATEMENT-LEVEL TRIGGERS
+
+Question 13:
+Create a Statement-Level Trigger that prints a notification whenever an INSERT, UPDATE, or DELETE operation occurs on the Match table.
+
+CREATE OR REPLACE TRIGGER trg_match_statement_log
+AFTER INSERT OR UPDATE OR DELETE ON match
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('A DML operation was performed on the MATCH table.');
+END;
+/
+
+UPDATE match
+SET venue = 'Camp Nou Main Stadium'
+WHERE matchId = 501;
+
+Question 14:
+Create a Statement-Level Trigger that logs an audit message whenever modifications are made to the Team table.
+
+CREATE OR REPLACE TRIGGER trg_team_audit_stmt
+AFTER INSERT OR UPDATE OR DELETE ON team
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(
+        'Team records modified. Statement-level audit completed.'
+    );
+END;
+/
+
+UPDATE team
+SET teamCoach = 'Hansi Flick Senior'
+WHERE teamId = 301;
+
+PACKAGES
+
+Question 15:
+Create a Package (pkg_tournament) consisting of a procedure to add a new tournament and a function to retrieve tournament names.
+
+CREATE OR REPLACE PACKAGE pkg_tournament AS
+    PROCEDURE add_tournament(
+        p_id NUMBER,
+        p_name VARCHAR2,
+        p_start DATE,
+        p_end DATE
+    );
+
+    FUNCTION get_name(p_id NUMBER) RETURN VARCHAR2;
+END pkg_tournament;
+/
+
+CREATE OR REPLACE PACKAGE BODY pkg_tournament AS
+
+    PROCEDURE add_tournament(
+        p_id NUMBER,
+        p_name VARCHAR2,
+        p_start DATE,
+        p_end DATE
+    ) IS
+    BEGIN
+        INSERT INTO tournament
+        VALUES (p_id, p_name, p_start, p_end);
+    END add_tournament;
+
+    FUNCTION get_name(p_id NUMBER) RETURN VARCHAR2 IS
+        v_name VARCHAR2(100);
+    BEGIN
+        SELECT tournamentName INTO v_name
+        FROM tournament
+        WHERE tournamentId = p_id;
+
+        RETURN v_name;
+    END get_name;
+
+END pkg_tournament;
+/
+
+DECLARE
+    c VARCHAR2(100);
+BEGIN
+    c := pkg_tournament.get_name(201);
+    DBMS_OUTPUT.PUT_LINE('Tournament Name: ' || c);
+END;
+/
+
+Question 16:
+Create a Package (pkg_team) containing subprograms for adding a new player and fetching a team captain's name.
+
+CREATE OR REPLACE PACKAGE pkg_team AS
+    PROCEDURE add_player(
+        p_id NUMBER,
+        p_name VARCHAR2,
+        p_info VARCHAR2,
+        p_tid NUMBER
+    );
+
+    FUNCTION get_captain(p_tid NUMBER) RETURN VARCHAR2;
+END pkg_team;
+/
+
+CREATE OR REPLACE PACKAGE BODY pkg_team AS
+
+    PROCEDURE add_player(
+        p_id NUMBER,
+        p_name VARCHAR2,
+        p_info VARCHAR2,
+        p_tid NUMBER
+    ) IS
+    BEGIN
+        INSERT INTO player
+        VALUES (p_id, p_name, p_info, p_tid);
+    END add_player;
+
+    FUNCTION get_captain(p_tid NUMBER) RETURN VARCHAR2 IS
+        v_cap VARCHAR2(100);
+    BEGIN
+        SELECT teamCaptain INTO v_cap
+        FROM team
+        WHERE teamId = p_tid;
+
+        RETURN v_cap;
+    END get_captain;
+
+END pkg_team;
+/
+
+DECLARE
+    c VARCHAR2(100);
+BEGIN
+    c := pkg_team.get_captain(301);
+    DBMS_OUTPUT.PUT_LINE('Team Captain: ' || c);
+END;
+/
